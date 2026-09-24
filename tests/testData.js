@@ -1,4 +1,4 @@
-export default MyWords = [
+export const MyWords = [
   {
     word: "hello",
     phonetics: "həˈləʊ",
@@ -36,3 +36,5 @@ export default MyWords = [
       "To build or alter according to personal preferences or specifications.",
   },
 ];
+
+export default MyWords;

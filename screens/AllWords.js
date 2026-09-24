@@ -8,23 +8,57 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import Item from "../components/ListItem";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 
 import { COLORS } from "../constants";
 
-function AllWords() {
+function AllWords({ navigation, route }) {
   const [myWords, setMyWords] = useState([]);
+
+  const addedWord = route.params?.newWord;
+  const editedWord = route.params?.editedWord;
+
+  useEffect(() => {
+    if (!addedWord) {
+      return;
+    }
+    setMyWords((prev) =>
+      prev.some((item) => item.word === addedWord.word)
+        ? prev.map((item) =>
+            item.word === addedWord.word ? addedWord : item
+          )
+        : [...prev, addedWord]
+    );
+    navigation.setParams({ newWord: undefined });
+  }, [addedWord]);
+
+  useEffect(() => {
+    if (!editedWord) {
+      return;
+    }
+    setMyWords((prev) =>
+      prev.map((item) => (item.word === editedWord.word ? editedWord : item))
+    );
+    navigation.setParams({ editedWord: undefined });
+  }, [editedWord]);
 
   function deleteWord(wordToDelete) {
     setMyWords((prev) => prev.filter((item) => item.word != wordToDelete));
   }
 
+  const goToAddWord = () => {
+    navigation.navigate("AddWord");
+  };
+
   return (
     <>
-      <Pressable
-        style={styles.addPressable}
-      >
-        <Ionicons name="add-outline" size={46} color={COLORS.white} />
+      <Pressable style={styles.addPressable} onPress={goToAddWord}>
+        <FontAwesome6
+          name="plus"
+          iconStyle="solid"
+          size={46}
+          color={COLORS.white}
+        />
       </Pressable>
       <View style={{ flex: 2 }}>
         <FlatList

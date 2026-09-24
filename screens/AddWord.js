@@ -8,11 +8,11 @@ import {
 } from "react-native";
 import { useState, useEffect } from "react";
 import { getWordInfo } from "../services/wordsHandler";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
 import { playSound } from "../services/soundHandler";
 import { COLORS } from "../constants";
 
-function AddWord() {
+function AddWord({ navigation }) {
   const [text, setText] = useState();
   const [wordData, setWordData] = useState();
 
@@ -22,15 +22,26 @@ function AddWord() {
   }
 
   useEffect(() => {
-    const delayDebounceFn = setTimeout(async () => {
+    const delayDebounceFn = setTimeout(() => {
       if (text) {
-        const wordDataReceived = await getWordInfo(text);
+        const wordDataReceived = getWordInfo(text);
+        console.log("wordDataReceived", wordDataReceived);
         setWordData(wordDataReceived);
       }
     }, 1000);
 
     return () => clearTimeout(delayDebounceFn);
   }, [text]);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: wordData?.word ? `Adding word "${wordData.word}"` : "Adding word",
+    });
+  }, [wordData, navigation]);
+
+  const onAddWord = () => {
+    navigation.popTo("AllWords", { newWord: wordData });
+  };
 
   return (
     <>
@@ -65,8 +76,9 @@ function AddWord() {
                 style={styles.playPressable}
                 onPress={() => playSound(wordData.audio)}
               >
-                <Ionicons
-                  name="volume-medium-outline"
+                <FontAwesome6
+                  name="volume-low"
+                  iconStyle="solid"
                   size={28}
                   color={COLORS.primary900}
                 />
@@ -77,7 +89,7 @@ function AddWord() {
           <Text style={styles.partOfSpeech}>{wordData.partOfSpeech}</Text>
           <Text style={styles.meaning}>{wordData.meaning}</Text>
           {wordData.word && (
-            <Pressable style={styles.buttonContainer} onPress={onAdd}>
+            <Pressable style={styles.buttonContainer} onPress={onAddWord}>
               <Text style={{ fontSize: 24, color: COLORS.white }}>Add</Text>
             </Pressable>
           )}

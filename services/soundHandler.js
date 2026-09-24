@@ -1,16 +1,10 @@
-import { Audio } from "expo-av";
+import { createAudioPlayer } from "expo-audio";
 
 export async function playSound(audioPath) {
-  const sound = new Audio.Sound();
   try {
-    await sound.loadAsync(
-      {
-        uri: audioPath,
-      },
-      { shouldPlay: true }
-    );
-    await sound.playAsync();
-    setTimeout(() => sound.unloadAsync(), 2000);
+    const player = createAudioPlayer({ uri: audioPath });
+    player.play();
+    setTimeout(() => player.remove(), 2000);
   } catch (error) {
     console.log(error);
   }

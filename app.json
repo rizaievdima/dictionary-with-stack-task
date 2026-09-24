@@ -6,18 +6,29 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "backgroundColor": "#262626",
     "assetBundlePatterns": [
       "**/*"
+    ],
+    "plugins": [
+      "expo-audio",
+      "expo-asset",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      "expo-font",
+      "@react-native-vector-icons/fontawesome6"
     ],
     "ios": {
       "supportsTablet": true
     },
     "android": {
+      "backgroundColor": "#262626",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"

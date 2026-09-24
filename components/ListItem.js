@@ -1,16 +1,23 @@
 import { View, StyleSheet, Text, Pressable } from "react-native";
-import Ionicons from "@expo/vector-icons/Ionicons";
+import { FontAwesome6 } from "@react-native-vector-icons/fontawesome6";
+import { useNavigation } from "@react-navigation/native";
 import { playSound } from "../services/soundHandler";
 import { COLORS } from "../constants";
 
-export default Item = ({ item, onDelete }) => {
+const Item = ({ item, onDelete }) => {
+  const navigation = useNavigation();
+
+  const goToEditWord = () => {
+    navigation.navigate("EditWord", { wordData: item });
+  };
 
   return (
     <View style={styles.item}>
       <Pressable disabled={!item.audio} onPress={() => playSound(item.audio)}>
         <View style={styles.iconContainer}>
-          <Ionicons
-            name="play-outline"
+          <FontAwesome6
+            name="play"
+            iconStyle="solid"
             size={28}
             style={
               !item.audio
@@ -20,9 +27,7 @@ export default Item = ({ item, onDelete }) => {
           />
         </View>
       </Pressable>
-      <Pressable
-        style={styles.textContainer}
-      >
+      <Pressable style={styles.textContainer} onPress={goToEditWord}>
         <Text style={styles.title}>{item.word}</Text>
         <Text style={styles.definition}>{item.meaning}</Text>
       </Pressable>
@@ -30,11 +35,18 @@ export default Item = ({ item, onDelete }) => {
         style={styles.iconContainer}
         onPress={() => onDelete(item.word)}
       >
-        <Ionicons name="trash-outline" size={22} color={COLORS.secondary800} />
+        <FontAwesome6
+          name="trash-can"
+          iconStyle="solid"
+          size={22}
+          color={COLORS.secondary800}
+        />
       </Pressable>
     </View>
   );
 };
+
+export default Item;
 
 const styles = StyleSheet.create({
   item: {
